@@ -4,30 +4,59 @@
 
 @layer base {
   :root {
-    --font-merriweather: 'Merriweather', serif;
+    --background: #05060c;
+    --foreground: #e8ecf6;
   }
-  
-  body {
-    font-family: var(--font-merriweather);
-  }
-  
-  /* Smooth scrolling */
+
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
-  
-  /* Improve text rendering */
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* RTL Support for Arabic - Only text direction, keep layout */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Custom selection */
+  ::selection {
+    background-color: rgba(0, 173, 181, 0.3);
+    color: #ffffff;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #05060c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1a2036;
+    border-radius: 999px;
+    border: 2px solid #05060c;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0a7177;
+  }
+
+  /* RTL Support for Arabic */
   html[dir="rtl"] {
     direction: rtl;
   }
-
-  /* Align text to right for Arabic, but keep visual layout */
   html[dir="rtl"] p,
   html[dir="rtl"] h1,
   html[dir="rtl"] h2,
@@ -42,50 +71,139 @@
   html[dir="rtl"] textarea {
     text-align: right;
   }
-
-  /* Keep buttons and links centered/aligned as designed */
   html[dir="rtl"] button,
   html[dir="rtl"] a {
     text-align: center;
   }
-
-  /* Ensure form inputs start from right */
   html[dir="rtl"] input,
   html[dir="rtl"] textarea {
     direction: rtl;
   }
 }
 
-.stroke {
-  -webkit-text-stroke: 1px black;
-  color: black;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black;
+@layer components {
+  /* Glassmorphism card */
+  .glass {
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-strong {
+    background: rgba(12, 15, 29, 0.7);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(100deg, #5ee2e6 0%, #00ADB5 50%, #2b4a9e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Section eyebrow / pill label */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5ee2e6;
+    background: rgba(0, 173, 181, 0.08);
+    border: 1px solid rgba(0, 173, 181, 0.25);
+  }
+
+  /* Primary button */
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.8rem;
+    border-radius: 0.85rem;
+    font-weight: 600;
+    color: #03171a;
+    background: linear-gradient(100deg, #5ee2e6, #00ADB5);
+    box-shadow: 0 12px 40px -12px rgba(0, 173, 181, 0.7);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 55px -12px rgba(0, 173, 181, 0.85);
+    filter: brightness(1.05);
+  }
+
+  /* Ghost / secondary button */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.8rem;
+    border-radius: 0.85rem;
+    font-weight: 600;
+    color: #e8ecf6;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.25s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 173, 181, 0.45);
+    transform: translateY(-2px);
+  }
 }
 
-.auto-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 20px;
-}
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 
-/* * {
-  border: 1px solid red;
-} */
+  /* Radial spotlight glow used behind hero / sections */
+  .bg-glow-teal {
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 173, 181, 0.35) 0%,
+      rgba(0, 173, 181, 0) 70%
+    );
+  }
+  .bg-glow-navy {
+    background: radial-gradient(
+      circle at center,
+      rgba(43, 74, 158, 0.4) 0%,
+      rgba(43, 74, 158, 0) 70%
+    );
+  }
 
-/***************************************************
- * Generated by SVG Artista on 7/21/2024, 3:36:59 PM
- * MIT license (https://opensource.org/licenses/MIT)
- * W. https://svgartista.net
- **************************************************/
-
-svg .svg-elem-1 {
-  stroke-dashoffset: 1406.6038818359375px;
-  stroke-dasharray: 1406.6038818359375px;
-  transition: stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) 0s;
-}
-
-svg.active .svg-elem-1 {
-  stroke-dashoffset: 2813.207763671875px;
+  /* Fade mask for marquees */
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+  }
 }

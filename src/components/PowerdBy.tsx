@@ -1,78 +1,81 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 import { ScrollInAnimation } from "./scroll_in_animation";
 import { useTranslate } from "@/lib/langs/transaltion";
 
 const PowerdBy: React.FC = () => {
   const [t, lang] = useTranslate();
+
+  const highlights = [
+    t("service_2_title"),
+    t("service_1_title"),
+    t("service_3_title"),
+    t("service_4_title"),
+  ];
+
   return (
-    <div
+    <section
       id="PROPOS"
-      className=" py-16 px-[9%] w-full text-center md:text-start font-merriweather"
+      className="relative overflow-hidden py-24 sm:py-28"
     >
-      <div className="gap-10 md:gap-52 flex justify-between flex-col-reverse lg:flex-row items-center">
-        <div className="lg:w-1/2 mt-8 lg:mt-0">
-          <ScrollInAnimation type="left">
-            <>
+      <div className="pointer-events-none absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-glow-navy blur-2xl" />
+
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:px-8">
+        {/* Visual */}
+        <ScrollInAnimation type="left">
+          <div className="relative mx-auto max-w-md">
+            <div className="absolute inset-0 -z-10 rounded-3xl bg-glow-teal blur-2xl" />
+            <div className="overflow-hidden rounded-3xl glass p-6">
               <Image
                 src="/images/power.png"
-                alt="Digital Creations Illustration"
+                alt="IMZ - agence digitale"
                 width={580}
                 height={580}
-                // className="w-full h-auto"
+                className="h-auto w-full"
               />
-            </>
-          </ScrollInAnimation>
-        </div>
-        <div className="lg:w-[600px] lg:pr-8 ">
+            </div>
+          </div>
+        </ScrollInAnimation>
+
+        {/* Copy */}
+        <div className="text-center lg:text-start">
           <ScrollInAnimation type="right">
-            <h1
-              // this will be used to scroll to this section with #ABOUT US TITLE
-              className="text-4xl sm:text-5xl font-bold text-navy-600 mb-4 "
-            >
-              {t("about")}
-              <div className="relative w-fit mx-auto md:mx-0">
-                <p className="relative z-10  text-center">
-                  {lang === "fr" ? "d`" : ""}IMZ
-                </p>
-                <span className="absolute bottom-0 left-0 w-full h-4 bg-teal-500"></span>
-              </div>
-            </h1>
+            <span className="eyebrow">{t("about")}</span>
+            <h2 className="mt-5 font-display text-3xl font-bold text-white sm:text-4xl xl:text-5xl">
+              {t("about")} <span className="text-gradient">{lang === "fr" ? "d'" : ""}IMZ</span>
+            </h2>
           </ScrollInAnimation>
-          <ScrollInAnimation type="right" delay={0.2}>
-            <p className="text-lg text-gray-700 mb-8">
+
+          <ScrollInAnimation type="right" delay={0.1}>
+            <p className="mt-6 text-lg leading-relaxed text-slate-400">
               {t("about_imz_text_1")}
-              <br />
-              <br />
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-slate-400">
               {t("about_imz_text_2")}
             </p>
           </ScrollInAnimation>
-          {/* <ScrollInAnimation type="right" delay={0.4}>
-            <div className="links flex items-center md:flex-row flex-col">
-              <Link
-                href="/portfolio"
-                className="inline-block bg-navy-600 text-white font-bold py-3 px-6 hover:bg-navy-700 shadow-2xl transition duration-300"
-              >
-                En savoir plus
-              </Link>
-              <Link
-                href="/portfolio"
-                className="inline-block text-navy-600 flex items-center gap-4 font-bold mt-4 md:mt-0 py-3 px-6 mx-autoshadow-2xl "
-              >
-                <img
-                  className="w-[50px]"
-                  src="/images/play.png"
-                  alt="play.png"
-                />
-                <p>Regarder la vidéo</p>
-              </Link>
-            </div>
-          </ScrollInAnimation> */}
+
+          <ScrollInAnimation type="right" delay={0.2}>
+            <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {highlights.map((h) => (
+                <li
+                  key={h}
+                  className="flex items-start gap-3 text-start text-sm text-slate-300"
+                >
+                  <CheckCircle2
+                    size={18}
+                    className="mt-0.5 shrink-0 text-teal-400"
+                  />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </ScrollInAnimation>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

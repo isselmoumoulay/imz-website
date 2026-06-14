@@ -1,127 +1,130 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, Check, Globe } from "lucide-react";
 import { useTranslate } from "@/lib/langs/transaltion";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [t] = useTranslate();
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const navLinks = [
+    { href: "#ACCUEIL", label: t("home") },
+    { href: "#PROPOS", label: t("about") },
+    { href: "#SERVICES", label: t("services") },
+    { href: "#PORTFOLIO", label: t("portfolio") },
+    { href: "#RÉFÉRENCES", label: t("references") },
+  ];
+
   return (
-    <nav className="relative shadow-md">
-      <div className="holder flex items-center justify-between w-full mx-auto px-4 py-2">
-        <div className="logo">
-          <Link href="/">
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-x-0 top-0 z-50"
+    >
+      <div
+        className={`transition-all duration-300 ${
+          scrolled
+            ? "border-b border-white/10 bg-ink-900/80 backdrop-blur-xl"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8">
+          <Link href="/" className="relative flex items-center" aria-label="IMZ - Accueil">
             <Image
               src="/images/logo.png"
-              width={100}
-              height={40}
+              width={96}
+              height={38}
               alt="IMZ Logo"
+              className="h-9 w-auto brightness-0 invert"
+              priority
             />
           </Link>
-        </div>
-        <div className="hidden md:flex items-center">
-          <ul className="flex gap-8 uppercase">
-            <NavItem href="#ACCUEIL">{t("home")}</NavItem>
-            <NavItem href="#PROPOS">{t("about")}</NavItem>
-            <NavItem href="#SERVICES">{t("services")}</NavItem>
-            <NavItem href="#PORTFOLIO">{t("portfolio")}</NavItem>
-            <NavItem href="#RÉFÉRENCES">{t("references")}</NavItem>
-          </ul>
-          <Link
-            href="#CONTACT_NOW"
-            className="ml-8 uppercase px-6 font-merriweather font-bold py-4 bg-navy-600 text-white hover:bg-navy-700 transition-colors"
-          >
-            {t("contact")}
-          </Link>
-          <div className="ml-8 mr-4">
-            <LangageFlag />
-          </div>
-        </div>
-        <div className="md:hidden flex items-center">
-          <div className="mr-8">
-            <LangageFlag />
-          </div>
-          <button
-            onClick={() => {
-              setIsMenuOpen(!isMenuOpen);
-            }}
-            className="text-gray-500"
-            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <svg
-              width="32"
-              height="15"
-              viewBox="0 0 32 15"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line
-                y1="1.23779"
-                x2="32"
-                y2="1.23779"
-                stroke="#088395"
-                strokeWidth="2"
-              />
-              <line
-                y1="13.2378"
-                x2="32"
-                y2="13.2378"
-                stroke="#088395"
-                strokeWidth="2"
-              />
-            </svg>
-          </button>
-        </div>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              id="mobile-menu"
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              className="absolute z-10 bg-white md:hidden border-t-navy-600 top-16 left-0 right-0 shadow-md"
-              role="navigation"
-              aria-label="Menu mobile"
-            >
-              <ul className="flex uppercase flex-col font-merriweather mt-10">
-                {Object.entries({
-                  "#ACCUEIL": t("home"),
-                  "#PROPOS": t("about"),
-                  "#SERVICES": t("services"),
-                  "#PORTFOLIO": t("portfolio"),
-                  "#RÉFÉRENCES": t("references"),
-                }).map(([key, value]) => (
-                  <MobileNavItem
-                    key={key}
-                    href={value}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {value}
-                  </MobileNavItem>
-                ))}
 
-                <li>
+          {/* Desktop */}
+          <div className="hidden items-center gap-1 lg:flex">
+            {navLinks.map((link) => (
+              <NavItem key={link.href} href={link.href}>
+                {link.label}
+              </NavItem>
+            ))}
+          </div>
+
+          <div className="hidden items-center gap-3 lg:flex">
+            <LangageFlag />
+            <Link href="#CONTACT_NOW" className="btn-primary !px-5 !py-2.5 text-sm">
+              {t("contact")}
+            </Link>
+          </div>
+
+          {/* Mobile */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <LangageFlag />
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-100 transition-colors hover:bg-white/10"
+              aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="mx-4 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-ink-800/95 backdrop-blur-xl lg:hidden"
+            role="navigation"
+            aria-label="Menu mobile"
+          >
+            <ul className="flex flex-col p-3">
+              {navLinks.map((link) => (
+                <li key={link.href}>
                   <Link
-                    href="#CONTACT_NOW"
+                    href={link.href}
                     onClick={() => setIsMenuOpen(false)}
-                    className="block uppercase font-merriweather mt-4 py-2 px-4 text-center bg-navy-600 text-white hover:bg-navy-700 transition-colors"
+                    className="block rounded-lg px-4 py-3 font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-teal-300"
                   >
-                    {t("contact")}
+                    {link.label}
                   </Link>
                 </li>
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </nav>
+              ))}
+              <li className="mt-2 p-1">
+                <Link
+                  href="#CONTACT_NOW"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="btn-primary w-full"
+                >
+                  {t("contact")}
+                </Link>
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 };
+
 const NavItem = ({
   href,
   children,
@@ -129,35 +132,13 @@ const NavItem = ({
   href: string;
   children: React.ReactNode;
 }) => (
-  <li className="group">
-    <Link
-      href={href}
-      className="text-navy-600 font-merriweather font-bold relative"
-    >
-      {children}
-      <span className="absolute left-0 -bottom-2 font-merriweather w-full h-1 bg-teal-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-    </Link>
-  </li>
-);
-
-const MobileNavItem = ({
-  href,
-  children,
-  onClick,
-}: {
-  href: string;
-  children: React.ReactNode;
-  onClick: () => void;
-}) => (
-  <li>
-    <Link
-      href={href}
-      onClick={onClick}
-      className="block font-bold font-merriweather py-2 px-4 text-gray-700 hover:bg-gray-100 transition-colors"
-    >
-      {children}
-    </Link>
-  </li>
+  <Link
+    href={href}
+    className="group relative rounded-lg px-4 py-2 text-sm font-medium uppercase tracking-wide text-slate-300 transition-colors hover:text-white"
+  >
+    {children}
+    <span className="absolute inset-x-4 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-teal-400 to-teal-500 transition-transform duration-300 group-hover:scale-x-100" />
+  </Link>
 );
 
 export default Navbar;
@@ -167,9 +148,9 @@ function LangageFlag() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const languages = [
-    { code: "fr", name: "Français", flag: "🇫🇷" },
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "fr", name: "Français", short: "FR" },
+    { code: "en", name: "English", short: "EN" },
+    { code: "ar", name: "العربية", short: "AR" },
   ];
 
   const currentLang = languages.find((l) => l.code === lang) || languages[0];
@@ -178,43 +159,45 @@ function LangageFlag() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10"
         aria-label="Sélectionner la langue"
       >
-        <span className="text-sm font-medium">{currentLang.name}</span>
-        <svg
-          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <Globe size={15} className="text-teal-400" />
+        <span>{currentLang.short}</span>
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-          {languages.map((language) => (
-            <button
-              key={language.code}
-              onClick={() => {
-                setLang(language.code as "fr" | "en" | "ar");
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition-colors ${
-                lang === language.code ? "bg-teal-50 text-teal-600" : ""
-              }`}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: -8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.96 }}
+              transition={{ duration: 0.18 }}
+              className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-xl border border-white/10 bg-ink-800/95 p-1.5 shadow-card backdrop-blur-xl"
             >
-              <span className="text-sm font-medium">{language.name}</span>
-              {lang === language.code && (
-                <svg className="w-4 h-4 ml-auto text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              )}
-            </button>
-          ))}
-        </div>
-      )}
+              {languages.map((language) => (
+                <button
+                  key={language.code}
+                  onClick={() => {
+                    setLang(language.code as "fr" | "en" | "ar");
+                    setIsOpen(false);
+                  }}
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-white/5 ${
+                    lang === language.code ? "text-teal-300" : "text-slate-200"
+                  }`}
+                >
+                  <span className="font-medium">{language.name}</span>
+                  {lang === language.code && (
+                    <Check size={15} className="ml-auto text-teal-400" />
+                  )}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,110 +1,89 @@
 "use client";
 import React from "react";
-import Image from "next/image";
-import { ScrollInAnimation } from "./scroll_in_animation";
+import { motion } from "framer-motion";
+import { Smartphone, Globe, Code2, Palette, LifeBuoy, Gauge } from "lucide-react";
 import { Langage_key, useTranslate } from "@/lib/langs/transaltion";
+import { staggerContainer, fadeUpItem } from "./scroll_in_animation";
+
+const ICONS = [Smartphone, Globe, Code2, Palette, LifeBuoy, Gauge];
 
 const Stuff: React.FC = () => {
   const [t] = useTranslate();
 
-  //list.generate(6)
   const solutions = [1, 2, 3, 4, 5, 6].map((id) => ({
     id,
+    Icon: ICONS[id - 1],
     title: t(`service_${id}_title` as Langage_key),
     description: t(`service_${id}_text` as Langage_key),
   }));
 
   return (
-    <div id="SERVICES" className="relative py-16 px-[8%] mt-32 ">
-      <div className="absolute left-0 top-[190px] lg:top-[190px] w-1/2 h-1/2 z-10 hidden md:block">
-        <div className="w-full h-full ">
-          <svg
-            className="lg:w-[580px] lg:h-[671px] w-[500px] h-[500px]"
-            viewBox="0 0 580 671"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              x="-200"
-              y="0.0458984"
-              width="780"
-              height="670"
-              rx="335"
-              fill="#EBF4F6"
-            />
-          </svg>
-        </div>
-      </div>
-      <div className="bg-white py-16 px-4 relative sm:px-6 lg:px-8 font-merriweather">
-        <div className="mx-auto">
-          <h2 className="text-4xl sm:text-5xl text-center font-bold text-navy-600 mb-8 relative inline-block">
-            <p className="relative text-center mx-auto z-40">
-              {t("our_services")}
-            </p>
-            <span className="absolute bottom-0 left-0 w-full h-4 bg-teal-500"></span>
-          </h2>
+    <section id="SERVICES" className="relative overflow-hidden py-24 sm:py-28">
+      <div className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-glow-teal blur-2xl opacity-60" />
 
-          <div className="holder flex relative z-40 md:gap-[120px] md:flex-row flex-col-reverse">
-            <div className="relative mt-14">
-              {solutions.slice(3, 6).map((solution, index) => (
-                <ScrollInAnimation
-                  key={solution.id}
-                  type="left"
-                  delay={1.2 + index * 0.4}
-                >
-                  <div
-                    key={solution.id}
-                    className="flex flex-col md:items-start mt-10 md:text-left"
-                  >
-                    <div className="row flex flex-col md:flex-row gap-4">
-                      <div className="text-5xl text-teal-500 mb-2 stroke font-semibold">
-                        {solution.id}
-                      </div>
-                      <div className="text">
-                        <h3 className="text-[28px] font-bold text-navy-700 mb-2 ">
-                          {solution.title}
-                        </h3>
-                        <p className="text-navy-600 text-[18px]">
-                          {solution.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollInAnimation>
-              ))}
-            </div>
-            <div className="relative">
-              {solutions.slice(0, 3).map((solution, index) => (
-                <ScrollInAnimation
-                  key={solution.id}
-                  type="right"
-                  delay={index * 0.4}
-                >
-                  <div
-                    key={solution.id}
-                    className="flex flex-col md:items-start mt-10 md:text-left"
-                  >
-                    <div className="row flex flex-col md:flex-row gap-4">
-                      <div className="text-5xl text-teal-500 mb-2 stroke font-semibold">
-                        {solution.id}
-                      </div>
-                      <div className="text">
-                        <h3 className="text-[28px] font-bold text-navy-700 mb-2 ">
-                          {solution.title}
-                        </h3>
-                        <p className="text-navy-600 text-[18px]">
-                          {solution.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollInAnimation>
-              ))}
-            </div>
-          </div>
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Header */}
+        <div className="mx-auto max-w-2xl text-center">
+          <motion.span
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="eyebrow"
+          >
+            {t("services")}
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="mt-5 font-display text-3xl font-bold text-white sm:text-4xl xl:text-5xl"
+          >
+            {t("our_services")}
+          </motion.h2>
         </div>
+
+        {/* Grid */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {solutions.map(({ id, Icon, title, description }) => (
+            <motion.article
+              key={id}
+              variants={fadeUpItem}
+              className="group relative overflow-hidden rounded-2xl glass p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-teal-500/40 hover:shadow-glow"
+            >
+              {/* hover glow */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-glow-teal opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="relative">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-500/10 text-teal-300 ring-1 ring-teal-500/20 transition-colors duration-300 group-hover:bg-teal-500/20">
+                  <Icon size={26} />
+                </div>
+
+                <div className="mt-6 flex items-baseline gap-3">
+                  <span className="font-display text-sm font-semibold text-teal-500/70">
+                    0{id}
+                  </span>
+                  <h3 className="font-display text-xl font-semibold text-white">
+                    {title}
+                  </h3>
+                </div>
+
+                <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                  {description}
+                </p>
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 

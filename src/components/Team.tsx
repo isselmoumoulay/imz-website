@@ -1,120 +1,68 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { ScrollInAnimation } from "./scroll_in_animation";
+import { motion } from "framer-motion";
 import { useTranslate } from "@/lib/langs/transaltion";
+import { staggerContainer, fadeUpItem } from "./scroll_in_animation";
+
 interface Sponsor {
   name: string;
   logo: string;
-  description: string;
 }
-
-const TeamMember: React.FC<Sponsor> = ({ name, logo, description }) => (
-  <div
-    className={
-      "flex  relative flex-col items-center gap-y-8 py-10 p-4 bg-white rounded-[70px] border-2 " +
-      (description ? "group" : "")
-    }
-  >
-    <Image
-      src={logo}
-      alt={name}
-      width={150}
-      height={150}
-      className="rounded-full mb-4 md:w-[150px] md:h-[150px] group-hover:opacity-30"
-    />
-    <h3 className="font-semibold text-center  text-slate-700 text-xl group-hover:opacity-30">
-      {name}
-    </h3>
-    <p className="absolute font-medium font-merriweather mx-10 inset-x-0 top-20 flex items-center justify-center transition-all opacity-0 z-40 group-hover:opacity-100 translate-y-20 group-hover:translate-y-0">
-      {description}
-    </p>
-  </div>
-);
 
 const SponsorsSection: React.FC = () => {
   const [t] = useTranslate();
+
   const sponsors: Sponsor[] = [
-    {
-      name: "Direction tresor nouadhibou",
-      logo: "/images/sponsors/rim.png",
-
-      description: "",
-    },
-    {
-      name: "Garde côte mauritanienne",
-      logo: "/images/sponsors/gcm.png",
-      description: "",
-      // "adajsdjas`diasd asdas das dsad adajs djas`dias dasdas dasdsad adaj sdjas`dias dasdas dasd sad adaj sdjas`diasd asdas dasdsad adaj sdjas`dias dasdas das dsad adajs djas`dias dasdas dasd sad",
-    },
-    {
-      name: "Bureau el moustafa consulting",
-      logo: "/images/sponsors/bemc.jpeg",
-      description: "",
-    },
-    {
-      name: "Commue de nouadhibou",
-      logo: "/images/sponsors/nouad.jpeg",
-
-      description: "",
-    },
-    {
-      name: "Banque Centrale De Mauritanie",
-      logo: "/images/sponsors/bcm.png",
-
-      description: "",
-    },
-    {
-      name: "ONISPA",
-      logo: "/images/sponsors/onispa.png",
-
-      description: "",
-    },
-    {
-      name: "Port de Tanit",
-      logo: "/images/sponsors/port_tanit.png",
-
-      description: "",
-    },
+    { name: "Direction Trésor Nouadhibou", logo: "/images/sponsors/rim.png" },
+    { name: "Garde Côte Mauritanienne", logo: "/images/sponsors/gcm.png" },
+    { name: "Bureau El Moustafa Consulting", logo: "/images/sponsors/bemc.jpeg" },
+    { name: "Commune de Nouadhibou", logo: "/images/sponsors/nouad.jpeg" },
+    { name: "Banque Centrale de Mauritanie", logo: "/images/sponsors/bcm.png" },
+    { name: "ONISPA", logo: "/images/sponsors/onispa.png" },
+    { name: "Port de Tanit", logo: "/images/sponsors/port_tanit.png" },
   ];
-  const [hoverIndex, setHoverIndex] = React.useState<number | null>(null);
 
   return (
-    <section id="RÉFÉRENCES" className=" py-12 px-[8%] font-merriweather">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl sm:text-5xl text-center font-bold w-fit mx-auto text-navy-600 relative">
-          <p className="relative text-center z-40">{t("our_references")}</p>
-          <span className="absolute bottom-0 left-0 w-full h-4 bg-teal-500"></span>
-        </h2>
-        <p className="text-xl md:text-3xl my-8 text-center font-semibold text-slate-700">
-          {t("they_trust_us")}
-        </p>
+    <section id="RÉFÉRENCES" className="relative overflow-hidden py-24 sm:py-28">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-glow-navy blur-2xl opacity-60" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
-          {sponsors.map((sponsor, index) => (
-            <ScrollInAnimation
-              key={index}
-              type="rotate"
-              delay={index * 0.1}
-              duration={0.3}
-            >
-              <div
-                key={index}
-                onMouseEnter={() => setHoverIndex(index)}
-                onMouseLeave={() => setHoverIndex(null)}
-                className={` transition-all rounded-[70px] ${
-                  index === hoverIndex ? "scale-[1.05] shadow-xl" : ""
-                } ${
-                  hoverIndex !== null && index !== hoverIndex
-                    ? "opacity-50"
-                    : ""
-                }`}
-              >
-                <TeamMember key={index} {...sponsor} />
-              </div>
-            </ScrollInAnimation>
-          ))}
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow">{t("our_references")}</span>
+          <h2 className="mt-5 font-display text-3xl font-bold text-white sm:text-4xl xl:text-5xl">
+            {t("they_trust_us")}
+          </h2>
         </div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          className="mt-16 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
+        >
+          {sponsors.map((sponsor) => (
+            <motion.div
+              key={sponsor.name}
+              variants={fadeUpItem}
+              className="group flex flex-col items-center gap-4 rounded-2xl glass p-6 text-center transition-all duration-300 hover:-translate-y-1.5 hover:border-teal-500/40 hover:shadow-glow"
+            >
+              <div className="flex h-24 w-full items-center justify-center rounded-xl bg-white/90 p-4 transition-transform duration-300 group-hover:scale-[1.03]">
+                <Image
+                  src={sponsor.logo}
+                  alt={sponsor.name}
+                  width={140}
+                  height={90}
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+              <h3 className="text-sm font-medium leading-snug text-slate-300">
+                {sponsor.name}
+              </h3>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

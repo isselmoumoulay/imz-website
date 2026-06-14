@@ -14,8 +14,8 @@ const ContactForm = lazy(() => import("@/components/ContactForm"));
 
 // Composant de chargement
 const LoadingSection = () => (
-  <div className="flex items-center justify-center py-20">
-    <div className="animate-pulse text-teal-500 text-xl">Chargement...</div>
+  <div className="flex items-center justify-center py-24">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-teal-500/30 border-t-teal-400" />
   </div>
 );
 
@@ -35,7 +35,7 @@ export default function Home() {
   }, [lang]);
 
   return (
-    <main className="flex min-h-screen flex-col overflow-x-hidden">
+    <main className="relative flex min-h-screen flex-col overflow-x-hidden bg-ink-900">
       <Hero />
       <Suspense fallback={<LoadingSection />}>
         <PowerdBy />

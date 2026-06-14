@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
-const merriweather = Merriweather({ 
-  weight: ["300", "400", "700", "900"],
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-merriweather"
+  variable: "--font-inter",
+  display: "swap",
+});
+const spaceGrotesk = Space_Grotesk({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -75,17 +80,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={merriweather.variable}>
+    <html
+      lang="fr"
+      className={`${inter.variable} ${spaceGrotesk.variable} scroll-smooth`}
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="theme-color" content="#05060c" />
       </head>
-      <body className={`${inter.className} ${merriweather.variable} antialiased`}>
-        <Suspense fallback={<div className="h-16 bg-white shadow-md" />}>
+      <body className="bg-ink-900 text-slate-100 antialiased">
+        <Suspense fallback={<div className="h-20 bg-ink-900" />}>
           <Navbar />
         </Suspense>
         {children}
-        <Suspense fallback={<div className="h-32 bg-gray-100" />}>
+        <Suspense fallback={<div className="h-32 bg-ink-900" />}>
           <Footer />
         </Suspense>
       </body>

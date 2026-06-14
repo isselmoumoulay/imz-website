@@ -3,49 +3,61 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { ScrollInAnimation } from "./scroll_in_animation";
 import { useTranslate } from "@/lib/langs/transaltion";
 
 const Experience: React.FC = () => {
   const [t] = useTranslate();
-  return (
-    <div className="px-[8%]">
-      <ScrollInAnimation type="bot" duration={2}>
-        <div className="bg-white  py-32 sm:px-6 lg:px-8 text-center md:text-start font-merriweather">
-          <div className="mx-auto flex flex-col lg:flex-row items-center">
-            <div className="lg:w-1/2 lg:pr-8">
-              <h1 className="text-4xl sm:text-5xl font-bold text-navy-600 w-fit mb-4">
-                {t("innovation_title_1")}
 
-                <div className="relative">
-                  <p className="relative z-20">{t("innovation_title_2")}</p>
-                  <span className="absolute bottom-0 left-0 w-full h-5 bg-teal-500"></span>
-                </div>
-              </h1>
-              <p className="text-lg text-gray-700 mb-8">
-                {t("innovation_text")}
-              </p>
-              {/* <Link
-                href="/"
-                className="inline-block shadow-2xl bg-navy-600 text-white font-bold py-3 px-6 mt-16 mx-auto hover:bg-navy-700  transition duration-300"
-              >
-                En savoir plus
-              </Link> */}
+  return (
+    <section className="relative overflow-hidden py-24 sm:py-28">
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl glass p-8 sm:p-12 lg:p-16">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-glow-teal blur-2xl opacity-70" />
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-glow-navy blur-2xl opacity-70" />
+
+          <div className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+            <div className="text-center lg:text-start">
+              <ScrollInAnimation type="left">
+                <h2 className="font-display text-3xl font-bold text-white sm:text-4xl xl:text-5xl">
+                  {t("innovation_title_1")}{" "}
+                  <span className="text-gradient">{t("innovation_title_2")}</span>
+                </h2>
+              </ScrollInAnimation>
+              <ScrollInAnimation type="left" delay={0.1}>
+                <p className="mt-6 text-lg leading-relaxed text-slate-400">
+                  {t("innovation_text")}
+                </p>
+                <Link
+                  href="#CONTACT_NOW"
+                  className="btn-primary group mt-8 inline-flex"
+                >
+                  {t("call_to_action")}
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </Link>
+              </ScrollInAnimation>
             </div>
-            <div className="lg:w-1/2 mt-8 lg:mt-0">
-              <Image
-                unoptimized
-                src="/images/experiences.png"
-                alt="Digital Creations Illustration"
-                width={500}
-                height={500}
-                className="w-full h-auto"
-              />
-            </div>
+
+            <ScrollInAnimation type="right">
+              <div className="relative mx-auto max-w-md">
+                <Image
+                  unoptimized
+                  src="/images/experiences.png"
+                  alt="Innovation IMZ"
+                  width={500}
+                  height={500}
+                  className="h-auto w-full drop-shadow-2xl"
+                />
+              </div>
+            </ScrollInAnimation>
           </div>
         </div>
-      </ScrollInAnimation>
-    </div>
+      </div>
+    </section>
   );
 };
 
