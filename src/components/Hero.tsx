@@ -19,12 +19,6 @@ const item = {
 const Hero: React.FC = () => {
   const [t] = useTranslate();
 
-  const stats = [
-    { value: "11+", label: t("projects_realized") },
-    { value: "3", label: t("years_of_experience") },
-    { value: "7", label: t("unique_clients") },
-  ];
-
   return (
     <section
       id="ACCUEIL"
@@ -62,7 +56,7 @@ const Hero: React.FC = () => {
           <motion.div variants={item} className="flex justify-center lg:justify-start">
             <span className="eyebrow">
               <Sparkles size={13} />
-              {t("our_services")}
+              {t("tagline")}
             </span>
           </motion.div>
 
@@ -96,23 +90,6 @@ const Hero: React.FC = () => {
             <Link href="#PORTFOLIO" className="btn-ghost w-full sm:w-auto">
               {t("portfolio")}
             </Link>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            variants={item}
-            className="mt-12 grid max-w-md grid-cols-3 gap-4 lg:mx-0"
-          >
-            {stats.map((s) => (
-              <div key={s.label} className="text-center lg:text-start">
-                <div className="font-display text-3xl font-bold text-white">
-                  {s.value}
-                </div>
-                <div className="mt-1 text-xs leading-snug text-slate-500">
-                  {s.label}
-                </div>
-              </div>
-            ))}
           </motion.div>
         </motion.div>
 
