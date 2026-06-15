@@ -44,5 +44,6 @@
   "message": "Your Message",
   "send": "Send Message",
   "address": "Address",
-  "thanks": "Thank you! Message sent."
+  "thanks": "Thank you! Message sent.",
+  "visitors": "Visitors"
 }

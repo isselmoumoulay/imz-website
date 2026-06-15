@@ -1,6 +1,8 @@
 "use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { animate } from "framer-motion";
 import {
   Facebook,
   Instagram,
@@ -10,8 +12,65 @@ import {
   Mail,
   MapPin,
   ArrowUpRight,
+  Eye,
 } from "lucide-react";
 import { Langage_key, useTranslate } from "@/lib/langs/transaltion";
+
+const VISITORS_BASE = 1755;
+
+function VisitorCounter() {
+  const [t] = useTranslate();
+  const [count, setCount] = useState(VISITORS_BASE);
+
+  useEffect(() => {
+    let cancelled = false;
+    let controls: { stop: () => void } | undefined;
+
+    const ns = "imz-website";
+    const key = "visits";
+    const visited =
+      typeof window !== "undefined" && sessionStorage.getItem("imz_visited");
+    const url = visited
+      ? `https://abacus.jasoncameron.dev/get/${ns}/${key}`
+      : `https://abacus.jasoncameron.dev/hit/${ns}/${key}`;
+
+    fetch(url)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        sessionStorage.setItem("imz_visited", "1");
+        const target =
+          VISITORS_BASE + (typeof d?.value === "number" ? d.value : 0);
+        controls = animate(VISITORS_BASE, target, {
+          duration: 1.8,
+          ease: [0.22, 1, 0.36, 1],
+          onUpdate: (v) => setCount(Math.round(v)),
+        });
+      })
+      .catch(() => {
+        /* affichage de la base si le service est indisponible */
+      });
+
+    return () => {
+      cancelled = true;
+      controls?.stop();
+    };
+  }, []);
+
+  return (
+    <div className="mt-6 inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-500/10 text-teal-300 ring-1 ring-teal-500/20">
+        <Eye size={16} />
+      </span>
+      <div>
+        <div className="font-display text-lg font-bold leading-none text-white">
+          {count.toLocaleString("fr-FR")}
+        </div>
+        <div className="mt-1 text-xs text-slate-400">{t("visitors")}</div>
+      </div>
+    </div>
+  );
+}
 
 const Footer = () => {
   const [t] = useTranslate();
@@ -72,6 +131,8 @@ const Footer = () => {
                 </Link>
               ))}
             </div>
+
+            <VisitorCounter />
           </div>
 
           {/* Navigation */}
