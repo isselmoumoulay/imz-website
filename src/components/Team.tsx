@@ -24,7 +24,7 @@ const SponsorsSection: React.FC = () => {
   ];
 
   return (
-    <section id="RÉFÉRENCES" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="RÉFÉRENCES" className="relative overflow-hidden border-y border-white/[0.06] bg-gradient-to-b from-ink-600 to-ink-700 py-24 sm:py-28">
       <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-glow-navy blur-2xl opacity-60" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">

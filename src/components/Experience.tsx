@@ -11,7 +11,7 @@ const Experience: React.FC = () => {
   const [t] = useTranslate();
 
   return (
-    <section className="relative overflow-hidden py-24 sm:py-28">
+    <section className="relative overflow-hidden border-y border-white/[0.06] bg-gradient-to-b from-ink-600 to-ink-700 py-24 sm:py-28">
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl glass p-8 sm:p-12 lg:p-16">
           <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-glow-teal blur-2xl opacity-70" />

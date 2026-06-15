@@ -18,7 +18,7 @@ const PowerdBy: React.FC = () => {
   return (
     <section
       id="PROPOS"
-      className="relative overflow-hidden py-24 sm:py-28"
+      className="relative overflow-hidden border-y border-white/[0.06] bg-gradient-to-b from-ink-600 to-ink-700 py-24 sm:py-28"
     >
       <div className="pointer-events-none absolute -left-40 top-1/3 h-96 w-96 rounded-full bg-glow-navy blur-2xl" />
 
